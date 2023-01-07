@@ -1,3 +1,4 @@
+import { OptionId } from "@utils/ElementData";
 import TileGrid from "@utils/TileGrid";
 
 const TILE_SIZE = 50;
@@ -7,6 +8,7 @@ let uuid = 1;
 export default class DisplayElement extends Phaser.GameObjects.Rectangle {
   private originalPos: { x: number; y: number };
   private id: number = uuid++;
+  private optionType: OptionId;
 
   constructor(
     scene: Phaser.Scene,
@@ -14,10 +16,12 @@ export default class DisplayElement extends Phaser.GameObjects.Rectangle {
     x: number,
     y: number,
     size: number,
-    color: number
+    color: number,
+    optionType: OptionId
   ) {
     const pixelWidth = TILE_SIZE * size;
     super(scene, x, y, pixelWidth, pixelWidth, color);
+    this.optionType = optionType;
     this.setOrigin(0, 1);
     this.setDepth(1000);
     this.scene.add.existing(this);
@@ -79,5 +83,9 @@ export default class DisplayElement extends Phaser.GameObjects.Rectangle {
 
   getId() {
     return this.id;
+  }
+
+  getType() {
+    return this.optionType;
   }
 }

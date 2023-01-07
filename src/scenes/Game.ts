@@ -3,7 +3,7 @@ import Scenes from "@scenes";
 import DisplayElement from "sprites/DisplayElement";
 import TileGrid from "@utils/TileGrid";
 import { TXT_COLOR } from "config";
-import { ElementOption } from "@utils/ElementData";
+import { ElementOption, Options } from "@utils/ElementData";
 
 export default class Game extends Phaser.Scene {
   private grid: TileGrid = new TileGrid();
@@ -23,7 +23,14 @@ export default class Game extends Phaser.Scene {
       .setOrigin(0)
       .setInteractive({ useHandCursor: true });
     submitText.on("pointerdown", () => {
-      console.log("Submit clicked");
+      console.table(
+        this.elements.map((sprite) => {
+          return {
+            type: Options.find((option) => option.uuid === sprite.getType())
+              ?.uuid,
+          };
+        })
+      );
     });
     const [LEFT, TOP] = this.grid.getWorldPos();
     const TILE_SIZE = this.grid.getTileSize();
@@ -52,14 +59,15 @@ export default class Game extends Phaser.Scene {
       .setOrigin(0);
 
     const HUD = this.scene.get(Scenes.HUD);
-    HUD.events.on("add_element", ({ size, colour }: ElementOption) => {
+    HUD.events.on("add_element", ({ size, colour, uuid }: ElementOption) => {
       const newElement = new DisplayElement(
         this,
         this.grid,
         this.cameras.main.centerX - (TILE_SIZE * size) / 2,
         TOP - 10,
         size,
-        colour
+        colour,
+        uuid
       );
       newElement.on("remove_element", ({ id }: { id: number }) => {
         const elementIndex = this.elements.findIndex(
