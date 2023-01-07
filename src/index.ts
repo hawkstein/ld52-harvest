@@ -3,15 +3,25 @@ import config from "./config";
 import Preload from "@scenes/Preload";
 import Game from "@scenes/Game";
 import HUD from "@scenes/Hud";
-// import LevelComplete from "@scenes/LevelComplete";
 import GameEnd from "@scenes/End";
 import Start from "@scenes/Start";
 import Options from "@scenes/Options";
 import Credits from "@scenes/Credits";
 import YearIntro from "@scenes/YearIntro";
+import Judges from "@scenes/Judges";
 
 new Phaser.Game(
   Object.assign(config, {
-    scene: [Preload, Start, Options, YearIntro, Game, HUD, GameEnd, Credits],
+    scene: [
+      Preload,
+      Start,
+      Options,
+      YearIntro,
+      Game,
+      HUD,
+      Judges,
+      GameEnd,
+      Credits,
+    ],
   })
 );

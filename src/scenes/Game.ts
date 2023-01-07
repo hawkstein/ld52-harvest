@@ -2,19 +2,45 @@ import Phaser from "phaser";
 import Scenes from "@scenes";
 import DisplayElement from "sprites/DisplayElement";
 import TileGrid from "@utils/TileGrid";
-import { TXT_COLOR } from "config";
+import { FADE_LENGTH, TXT_COLOR } from "config";
 import { ElementOption, Options } from "@utils/ElementData";
+
+type GameState = "building" | "judging";
 
 export default class Game extends Phaser.Scene {
   private grid: TileGrid = new TileGrid();
   private elements: DisplayElement[] = [];
 
+  private submitText?: Phaser.GameObjects.Text;
+  private removeText?: Phaser.GameObjects.Text;
+  private gameState: GameState = "building";
+
   constructor() {
     super(Scenes.GAME);
   }
 
+  init() {
+    console.log("Scene initialising");
+    this.events.once("start", () => {
+      console.log("Scene starting...");
+      this.gameState = "building";
+      this.grid = new TileGrid();
+      this.elements = [];
+    });
+
+    this.events.once("destroy", () => {
+      console.log("Destroying scene...");
+    });
+
+    this.events.once("shutdown", () => {
+      const HUD = this.scene.get(Scenes.HUD);
+      HUD.events.off("add_element");
+    });
+  }
+
   create() {
-    const submitText = this.add
+    console.log("Scene creating...");
+    this.submitText = this.add
       .text(220, 330, `Submit to judges`, {
         color: TXT_COLOR,
         fontSize: "24px",
@@ -22,16 +48,7 @@ export default class Game extends Phaser.Scene {
       })
       .setOrigin(0)
       .setInteractive({ useHandCursor: true });
-    submitText.on("pointerdown", () => {
-      console.table(
-        this.elements.map((sprite) => {
-          return {
-            type: Options.find((option) => option.uuid === sprite.getType())
-              ?.uuid,
-          };
-        })
-      );
-    });
+
     const [LEFT, TOP] = this.grid.getWorldPos();
     const TILE_SIZE = this.grid.getTileSize();
     const TILE_GAP = 4;
@@ -50,7 +67,7 @@ export default class Game extends Phaser.Scene {
       });
     });
 
-    this.add
+    this.removeText = this.add
       .text(400, 10, `Drag here to remove`, {
         color: TXT_COLOR,
         fontSize: "24px",
@@ -80,6 +97,42 @@ export default class Game extends Phaser.Scene {
       this.elements.push(newElement);
     });
 
-    this.cameras.main.fadeFrom(1000, 245, 229, 184);
+    this.addListenersToObjects();
+
+    this.cameras.main.fadeFrom(FADE_LENGTH, 245, 229, 184);
+  }
+
+  addListenersToObjects() {
+    this.submitText?.on("pointerdown", () => {
+      console.table(
+        this.elements.map((sprite) => {
+          return {
+            type: Options.find((option) => option.uuid === sprite.getType())
+              ?.uuid,
+          };
+        })
+      );
+      this.gameState = "judging";
+      const HUD = this.scene.get(Scenes.HUD);
+      this.tweens.add({
+        targets: [HUD.cameras.main, this.submitText, this.removeText],
+        alpha: 0,
+        duration: FADE_LENGTH,
+        onComplete: () => {
+          this.scene.pause(Scenes.HUD);
+        },
+      });
+      this.cameras.main.pan(
+        this.cameras.main.centerX,
+        this.cameras.main.centerY + 60,
+        600,
+        "Back.easeInOut"
+      );
+      this.scene.launch(Scenes.JUDGES);
+    });
+  }
+
+  removeListenersFromObjects() {
+    this.submitText?.off("pointerdown");
   }
 }

@@ -85,7 +85,7 @@ export default class HUD extends Phaser.Scene {
       this.tweens.add({
         targets: [up, down],
         x: this.expanded ? -100 : 20,
-        ease: "Power1",
+        ease: "Back.easeOut",
         duration: 300,
       });
       this.expanded = !this.expanded;
@@ -128,8 +128,11 @@ export default class HUD extends Phaser.Scene {
       container.add(text);
       optionToClick.setInteractive({ useHandCursor: true });
       optionToClick.on("pointerdown", () => {
-        this.events.emit("add_element", option);
-        toggle();
+        if (this.expanded) {
+          //Checking that we're expanded is a bit of kludge around a bug where the edge of the HUD is still clickable somehow
+          this.events.emit("add_element", option);
+          toggle();
+        }
       });
     });
   }

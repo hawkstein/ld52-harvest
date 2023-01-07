@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Scenes from "@scenes";
 import GameProgess from "@utils/GameProgress";
+import { FADE_LENGTH } from "config";
 
 export default class YearIntro extends Phaser.Scene {
   constructor() {
@@ -20,10 +21,10 @@ export default class YearIntro extends Phaser.Scene {
       .setOrigin(0.5);
 
     this.time.addEvent({
-      delay: 2000,
+      delay: FADE_LENGTH,
       callback: () => {
         const cam = this.cameras.main;
-        cam.fade(1000, 245, 229, 184);
+        cam.fade(FADE_LENGTH, 245, 229, 184);
         cam.once("camerafadeoutcomplete", () => {
           this.scene.launch(Scenes.HUD);
           this.scene.start(Scenes.GAME);

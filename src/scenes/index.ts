@@ -6,7 +6,7 @@ const Scenes = {
   YEAR_INTRO: "YEAR_INTRO",
   GAME: "GAME",
   HUD: "HUD",
-  LEVEL_COMPLETE: "LEVEL_COMPLETE",
+  JUDGES: "JUDGES",
   END: "END",
 } as const;
 
