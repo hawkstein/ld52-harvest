@@ -17,9 +17,9 @@ export default class DisplayElement extends Phaser.GameObjects.Rectangle {
     color: number
   ) {
     const pixelWidth = TILE_SIZE * size;
-    const [xPos, yPos] = grid.gridPosToScene(x, y);
-    super(scene, xPos, yPos, pixelWidth, pixelWidth, color);
+    super(scene, x, y, pixelWidth, pixelWidth, color);
     this.setOrigin(0, 1);
+    this.setDepth(1000);
     this.scene.add.existing(this);
     this.setInteractive({ useHandCursor: true });
     grid.fillGrid(this.x, this.y, size, this.id);

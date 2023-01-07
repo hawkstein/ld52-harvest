@@ -5,7 +5,7 @@ type GameData = {
   options: Map<string, boolean | number | string>;
 };
 
-const FORAGE_KEY = "ld-50-untitled-game";
+const FORAGE_KEY = "ld-52-harvest-game";
 const STORE_KEY = "data";
 
 const store: GameData = {

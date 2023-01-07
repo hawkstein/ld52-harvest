@@ -9,8 +9,8 @@ export default {
   parent: "game",
   backgroundColor: BG_COLOR,
   scale: {
-    width: 640,
-    height: 340,
+    width: 690,
+    height: 390,
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },

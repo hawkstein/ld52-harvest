@@ -14,16 +14,19 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    this.add
-      .text(210, 290, `Submit to judges`, {
+    const submitText = this.add
+      .text(220, 330, `Submit to judges`, {
         color: TXT_COLOR,
         fontSize: "24px",
         fontFamily: "KenneyMiniSquare",
       })
-      .setOrigin(0);
-    const LEFT = 100;
-    const TOP = 100;
-    const TILE_SIZE = 50;
+      .setOrigin(0)
+      .setInteractive({ useHandCursor: true });
+    submitText.on("pointerdown", () => {
+      console.log("Submit clicked");
+    });
+    const [LEFT, TOP] = this.grid.getWorldPos();
+    const TILE_SIZE = this.grid.getTileSize();
     const TILE_GAP = 4;
     this.grid.tiles.forEach((column, columnIndex) => {
       column.forEach((_, rowIndex) => {
@@ -45,14 +48,12 @@ export default class Game extends Phaser.Scene {
       const newElement = new DisplayElement(
         this,
         this.grid,
-        0,
-        0,
+        this.cameras.main.centerX - (TILE_SIZE * size) / 2,
+        TOP - 10,
         size,
         colour
       );
       this.elements.push(newElement);
     });
   }
-
-  update() {}
 }
