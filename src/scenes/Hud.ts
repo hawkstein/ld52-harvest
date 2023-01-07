@@ -24,7 +24,7 @@ export default class HUD extends Phaser.Scene {
     this.background.setPosition(0, -boxHeight);
 
     const button = this.add.rectangle(30, 0, 60, 50, 0xff2222).setOrigin(0, 0);
-    button.setInteractive();
+    button.setInteractive({ useHandCursor: true });
     button.on("pointerdown", () => {
       this.tweens.add({
         targets: this.background,
