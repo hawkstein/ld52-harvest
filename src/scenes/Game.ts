@@ -52,9 +52,6 @@ export default class Game extends Phaser.Scene {
       );
       this.elements.push(newElement);
     });
-
-    // new DisplayElement(this, this.grid, 0, 0, 2, 0xff2222);
-    // new DisplayElement(this, this.grid, 2, 2, 2, 0x002222);
   }
 
   update() {}

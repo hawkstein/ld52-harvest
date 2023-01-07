@@ -27,13 +27,10 @@ export default class HUD extends Phaser.Scene {
 
     const mask = new Phaser.Display.Masks.GeometryMask(this, this.background);
 
-    this.cameras.main.setMask(mask);
-
     const container = this.add.container(0, -boxHeight);
+    container.setMask(mask);
 
-    const button = this.add.rectangle(30, 0, 60, 50, 0xff2222).setOrigin(0, 0);
-    button.setInteractive({ useHandCursor: true });
-    button.on("pointerdown", () => {
+    const toggle = () => {
       this.tweens.add({
         targets: [container, this.background, mask],
         y: this.expanded ? -boxHeight : 0,
@@ -41,7 +38,11 @@ export default class HUD extends Phaser.Scene {
         duration: 300,
       });
       this.expanded = !this.expanded;
-    });
+    };
+
+    const button = this.add.rectangle(30, 0, 60, 50, 0xff2222).setOrigin(0, 0);
+    button.setInteractive({ useHandCursor: true });
+    button.on("pointerdown", toggle);
 
     const elementData = [...Options];
     let currentY = 50;
@@ -57,6 +58,7 @@ export default class HUD extends Phaser.Scene {
       optionToClick.setInteractive({ useHandCursor: true });
       optionToClick.on("pointerdown", () => {
         this.events.emit("add_element", option);
+        toggle();
       });
       currentY += 50 + option.size * 50;
     });
