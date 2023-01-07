@@ -58,7 +58,8 @@ export default class HUD extends Phaser.Scene {
     });
 
     down.on("pointerdown", () => {
-      this.scrollPos = Math.max(-600, this.scrollPos - 300);
+      this.scrollPos = Math.max(-2100, this.scrollPos - 300);
+      console.log(this.scrollPos);
       this.tweens.add({
         targets: container,
         y: this.scrollPos,
@@ -103,22 +104,34 @@ export default class HUD extends Phaser.Scene {
     button.on("pointerdown", toggle);
 
     const elementData = [...Options];
-    let currentY = 50;
+    let currentY = -50;
+    let previousSize = 1;
     elementData.forEach((option) => {
-      const optionToClick = this.add.rectangle(
-        200,
-        currentY,
-        option.size * 50,
-        option.size * 50,
-        option.colour
-      );
+      currentY += 50 + previousSize * 50;
+      previousSize = option.size;
+      const optionToClick = this.add
+        .rectangle(
+          200,
+          currentY,
+          option.size * 50,
+          option.size * 50,
+          option.colour
+        )
+        .setOrigin(0);
+      const text = this.add
+        .text(250, currentY, option.name, {
+          color: "#fff",
+          fontSize: "24px",
+          fontFamily: "KenneyMiniSquare",
+        })
+        .setOrigin(0);
       container.add(optionToClick);
+      container.add(text);
       optionToClick.setInteractive({ useHandCursor: true });
       optionToClick.on("pointerdown", () => {
         this.events.emit("add_element", option);
         toggle();
       });
-      currentY += 50 + option.size * 50;
     });
   }
 }
