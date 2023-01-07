@@ -1,3 +1,4 @@
+import { BG_COLOR, TXT_COLOR } from "config";
 import Phaser from "phaser";
 
 type MenuButtonConfig = {
@@ -12,7 +13,7 @@ export class MenuButton extends Phaser.GameObjects.Container {
   private isFocused: boolean = false;
   private buttonLabel: Phaser.GameObjects.Text;
 
-  public menuIndex?: number;
+  //public menuIndex?: number;
 
   constructor({ scene, label, onClick, x, y }: MenuButtonConfig) {
     super(scene, x, y);
@@ -21,8 +22,9 @@ export class MenuButton extends Phaser.GameObjects.Container {
       y: 0,
       text: label,
       style: {
-        color: "#fff",
-        fontSize: "36px",
+        color: TXT_COLOR,
+        fontSize: "24px",
+        fontFamily: "KenneyMiniSquare",
       },
     });
     this.buttonLabel.x -= this.buttonLabel.width / 2;
@@ -42,7 +44,7 @@ export class MenuButton extends Phaser.GameObjects.Container {
 
   setFocus(focus: boolean) {
     this.isFocused = focus;
-    this.buttonLabel.setBackgroundColor(this.isFocused ? "#ff0000" : "#000");
+    this.buttonLabel.setBackgroundColor(this.isFocused ? "#ff0000" : BG_COLOR);
   }
 
   click() {

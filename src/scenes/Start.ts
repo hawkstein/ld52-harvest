@@ -10,21 +10,12 @@ export default class Start extends Phaser.Scene {
   create() {
     const title = this.add.text(
       this.cameras.main.centerX,
-      this.cameras.main.centerY - 200,
-      "Ludum Dare 50",
-      { color: "#fff", fontSize: "36px" }
+      this.cameras.main.centerY - 100,
+      `Ludum Dare 52\nUntitled Compo Entry`,
+      { color: "#000", fontSize: "24px", fontFamily: "KenneyMiniSquare" }
     );
     title.x -= title.width / 2;
     title.y -= title.height / 2;
-
-    const subtitle = this.add.text(
-      this.cameras.main.centerX,
-      this.cameras.main.centerY - 100,
-      "Start Menu",
-      { color: "#fff", fontSize: "36px" }
-    );
-    subtitle.x -= subtitle.width / 2;
-    subtitle.y -= subtitle.height / 2;
 
     const menu = new StartMenu(
       this,
