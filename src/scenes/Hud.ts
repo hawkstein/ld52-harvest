@@ -59,7 +59,6 @@ export default class HUD extends Phaser.Scene {
 
     down.on("pointerdown", () => {
       this.scrollPos = Math.max(-2100, this.scrollPos - 300);
-      console.log(this.scrollPos);
       this.tweens.add({
         targets: container,
         y: this.scrollPos,

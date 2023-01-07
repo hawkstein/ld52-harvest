@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import Scenes from "@scenes";
 import StartMenu from "@components/StartMenu";
+import GameProgess from "@utils/GameProgress";
 
 export default class Start extends Phaser.Scene {
   constructor() {
@@ -23,5 +24,6 @@ export default class Start extends Phaser.Scene {
       this.cameras.main.centerY - 20
     );
     menu.build();
+    this.game.registry.set("progress", new GameProgess());
   }
 }

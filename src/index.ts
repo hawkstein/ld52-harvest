@@ -8,9 +8,10 @@ import GameEnd from "@scenes/End";
 import Start from "@scenes/Start";
 import Options from "@scenes/Options";
 import Credits from "@scenes/Credits";
+import YearIntro from "@scenes/YearIntro";
 
 new Phaser.Game(
   Object.assign(config, {
-    scene: [Preload, Start, Options, Game, HUD, GameEnd, Credits],
+    scene: [Preload, Start, Options, YearIntro, Game, HUD, GameEnd, Credits],
   })
 );

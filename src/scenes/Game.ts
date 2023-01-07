@@ -79,5 +79,7 @@ export default class Game extends Phaser.Scene {
       });
       this.elements.push(newElement);
     });
+
+    this.cameras.main.fadeFrom(1000, 245, 229, 184);
   }
 }

@@ -23,8 +23,7 @@ export default class StartMenu {
 
   build() {
     this.buildButton("Play", this.y, () => {
-      this.scene.scene.launch(Scenes.HUD);
-      this.scene.scene.start(Scenes.GAME);
+      this.scene.scene.start(Scenes.YEAR_INTRO);
     });
     //this.buildButton("Options", this.y, Scenes.OPTIONS);
     //this.buildButton("Credits", this.y, Scenes.CREDITS);
