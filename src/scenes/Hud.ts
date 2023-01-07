@@ -32,11 +32,19 @@ export default class HUD extends Phaser.Scene {
     container.setMask(mask);
 
     const toggle = () => {
+      if (!this.expanded) {
+        container.x = 0;
+      }
       this.tweens.add({
         targets: [container, this.background, mask],
         y: this.expanded ? -boxHeight : 0,
         ease: "Power1",
         duration: 300,
+        onComplete: () => {
+          if (!this.expanded) {
+            container.x = -boxWidth;
+          }
+        },
       });
       this.expanded = !this.expanded;
     };
