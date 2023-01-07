@@ -3,19 +3,38 @@ import Scenes from "@scenes";
 import { TXT_COLOR } from "config";
 
 export default class Game extends Phaser.Scene {
+  private grid: boolean[][];
+
   constructor() {
     super(Scenes.GAME);
+    this.grid = new Array(3).fill(new Array(9).fill(false));
   }
 
   create() {
-    const message = this.add.text(
-      this.cameras.main.centerX,
-      this.cameras.main.centerY - 0,
-      `Ludum Dare 52\nUntitled Compo Entry`,
-      { color: TXT_COLOR, fontSize: "36px", fontFamily: "KenneyMiniSquare" }
-    );
-    message.x -= message.width / 2;
-    message.y -= message.height / 2;
+    this.add
+      .text(210, 290, `Submit to judges`, {
+        color: TXT_COLOR,
+        fontSize: "24px",
+        fontFamily: "KenneyMiniSquare",
+      })
+      .setOrigin(0);
+
+    const TILE_SIZE = 50;
+    const TILE_GAP = 10;
+    this.grid.forEach((row, rowIndex) => {
+      row.forEach((_, columnIndex) => {
+        this.add
+          .rectangle(
+            50 + columnIndex * (TILE_SIZE + TILE_GAP),
+            100 + rowIndex * (TILE_SIZE + TILE_GAP),
+            TILE_SIZE,
+            TILE_SIZE,
+            0x333333,
+            0.2
+          )
+          .setOrigin(0);
+      });
+    });
   }
 
   update() {}
