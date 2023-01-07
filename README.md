@@ -1,12 +1,12 @@
 # Untitled Game
 
-The Ludum Dare 50 theme is "??"
+The Ludum Dare 52 theme is "Harvest"
 
 Game intro/description can go here.
 
-## Ludum Dare 50 Compo Entry
+## Ludum Dare 52 Compo Entry
 
-Built over 48hrs from 2nd to 4th April 2020 by @liam (LD) AKA: @hawkstein (GitHub)
+Built over 48hrs from 6th to 8th January 2023 by @liam (LD) AKA: @hawkstein (GitHub)
 
 ## Useful Tools
 
