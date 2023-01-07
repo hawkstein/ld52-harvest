@@ -52,11 +52,17 @@ export default class DisplayElement extends Phaser.GameObjects.Rectangle {
     );
     this.scene.input.on(
       "dragend",
-      (_: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.GameObject) => {
+      (
+        pointer: Phaser.Input.Pointer,
+        gameObject: Phaser.GameObjects.GameObject
+      ) => {
         if (gameObject !== this) {
           return;
         }
-        if (grid.areTilesEmpty(this.x, this.y, size, this.id)) {
+        if (pointer.x > 400 && pointer.y < 50) {
+          grid.fillGrid(this.originalPos.x, this.originalPos.y, size, 0);
+          this.emit("remove_element", { id: this.id });
+        } else if (grid.areTilesEmpty(this.x, this.y, size, this.id)) {
           grid.fillGrid(this.originalPos.x, this.originalPos.y, size, 0);
           const [xPos, yPos] = grid.snapPositionToGrid(this.x, this.y);
           this.x = xPos;
@@ -69,5 +75,9 @@ export default class DisplayElement extends Phaser.GameObjects.Rectangle {
         this.setDepth(this.y);
       }
     );
+  }
+
+  getId() {
+    return this.id;
   }
 }

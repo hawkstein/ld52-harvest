@@ -61,6 +61,14 @@ export default class Game extends Phaser.Scene {
         size,
         colour
       );
+      newElement.on("remove_element", ({ id }: { id: number }) => {
+        const elementIndex = this.elements.findIndex(
+          (displayElement) => displayElement.getId() === id
+        );
+        const sprite = this.elements[elementIndex];
+        this.elements.splice(elementIndex, 1);
+        sprite.destroy();
+      });
       this.elements.push(newElement);
     });
   }
