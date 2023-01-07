@@ -24,6 +24,6 @@ export default class Preload extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start(Scenes.GAME);
+    this.scene.start(Scenes.START);
   }
 }
