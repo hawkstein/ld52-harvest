@@ -6,11 +6,11 @@ export default class Preload extends Phaser.Scene {
     super(Scenes.PRELOAD);
   }
 
-  init() {
-    document.fonts.onloadingdone = (ev) => {
-      console.log(ev);
-    };
-  }
+  // init() {
+  //   document.fonts.onloadingdone = (ev) => {
+  //     console.log(ev);
+  //   };
+  // }
 
   preload() {
     // Create hidden text with font families that you have preloaded in index.html to ensure Phaser will render them
@@ -24,6 +24,6 @@ export default class Preload extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start(Scenes.START);
+    this.scene.start(Scenes.GAME);
   }
 }

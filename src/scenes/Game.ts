@@ -1,14 +1,14 @@
 import Phaser from "phaser";
 import Scenes from "@scenes";
+import DisplayElement from "sprites/DisplayElement";
+import TileGrid from "@utils/TileGrid";
 // import { TXT_COLOR } from "config";
 
 export default class Game extends Phaser.Scene {
-  private grid: boolean[][];
-  private originalPos?: { x: number; y: number };
+  private grid: TileGrid = new TileGrid();
 
   constructor() {
     super(Scenes.GAME);
-    this.grid = new Array(3).fill(new Array(9).fill(true));
   }
 
   create() {
@@ -23,8 +23,8 @@ export default class Game extends Phaser.Scene {
     const TOP = 100;
     const TILE_SIZE = 50;
     const TILE_GAP = 4;
-    this.grid.forEach((row, rowIndex) => {
-      row.forEach((_, columnIndex) => {
+    this.grid.tiles.forEach((column, columnIndex) => {
+      column.forEach((_, rowIndex) => {
         this.add
           .rectangle(
             LEFT + TILE_GAP + columnIndex * TILE_SIZE,
@@ -38,53 +38,8 @@ export default class Game extends Phaser.Scene {
       });
     });
 
-    const element = this.add
-      .rectangle(200, 100, TILE_SIZE, TILE_SIZE, 0xff2222)
-      .setOrigin(0);
-    element.setInteractive({ useHandCursor: true });
-    this.input.setDraggable(element);
-    this.input.on(
-      "dragstart",
-      (_: Phaser.Input.Pointer, __: Phaser.GameObjects.GameObject) => {
-        const gridX = Math.round((element.x - LEFT) / TILE_SIZE);
-        const gridY = Math.round((element.y - TOP) / TILE_SIZE);
-        this.grid[gridY][gridX] = true;
-        this.originalPos = { x: element.x, y: element.y };
-      }
-    );
-    this.input.on(
-      "drag",
-      (
-        _: Phaser.Input.Pointer,
-        __: Phaser.GameObjects.GameObject,
-        dragX: number,
-        dragY: number
-      ) => {
-        element.x = dragX;
-        element.y = dragY;
-      }
-    );
-    this.input.on(
-      "dragend",
-      (_: Phaser.Input.Pointer, __: Phaser.GameObjects.GameObject) => {
-        const gridX = Math.round((element.x - LEFT) / TILE_SIZE);
-        const gridY = Math.round((element.y - TOP) / TILE_SIZE);
-        if (
-          gridY >= 0 &&
-          gridY <= 2 &&
-          gridX >= 0 &&
-          gridX <= 8 &&
-          this.grid[gridY][gridX]
-        ) {
-          element.x = LEFT + gridX * TILE_SIZE;
-          element.y = TOP + gridY * TILE_SIZE;
-          this.grid[gridY][gridX] = false;
-        } else {
-          element.x = this.originalPos?.x ?? 0;
-          element.y = this.originalPos?.y ?? 0;
-        }
-      }
-    );
+    new DisplayElement(this, this.grid, 0, 0, 2, 0xff2222);
+    new DisplayElement(this, this.grid, 2, 2, 2, 0x002222);
   }
 
   update() {}
