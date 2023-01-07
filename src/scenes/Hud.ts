@@ -5,7 +5,9 @@ import Phaser from "phaser";
 
 export default class HUD extends Phaser.Scene {
   private background?: Phaser.GameObjects.Graphics;
+  private blocker?: Phaser.GameObjects.Rectangle;
   private expanded = false;
+  private scrollPos = 0;
 
   constructor() {
     super({ key: Scenes.HUD });
@@ -21,6 +23,11 @@ export default class HUD extends Phaser.Scene {
     const boxWidth = this.cameras.main.width;
     const boxHeight = this.cameras.main.height;
 
+    this.blocker = this.add
+      .rectangle(0, -boxHeight, boxWidth, boxHeight, 0x000000, 0)
+      .setOrigin(0)
+      .setInteractive();
+
     this.background = this.add.graphics();
     this.background.fillStyle(0x222222, 0.8);
     this.background.fillRect(0, 0, boxWidth, boxHeight);
@@ -31,12 +38,41 @@ export default class HUD extends Phaser.Scene {
     const container = this.add.container(0, -boxHeight);
     container.setMask(mask);
 
+    const up = this.add
+      .rectangle(-100, 80, 40, 40, 0xff2222)
+      .setOrigin(0)
+      .setInteractive({ useHandCursor: true });
+    const down = this.add
+      .rectangle(-100, 150, 40, 40, 0xff2222)
+      .setOrigin(0)
+      .setInteractive({ useHandCursor: true });
+
+    up.on("pointerdown", () => {
+      this.scrollPos = Math.min(0, this.scrollPos + 300);
+      this.tweens.add({
+        targets: container,
+        y: this.scrollPos,
+        ease: "Power1",
+        duration: 300,
+      });
+    });
+
+    down.on("pointerdown", () => {
+      this.scrollPos = Math.max(-600, this.scrollPos - 300);
+      this.tweens.add({
+        targets: container,
+        y: this.scrollPos,
+        ease: "Power1",
+        duration: 300,
+      });
+    });
+
     const toggle = () => {
       if (!this.expanded) {
         container.x = 0;
       }
       this.tweens.add({
-        targets: [container, this.background, mask],
+        targets: [container, this.background, mask, this.blocker],
         y: this.expanded ? -boxHeight : 0,
         ease: "Power1",
         duration: 300,
@@ -45,6 +81,12 @@ export default class HUD extends Phaser.Scene {
             container.x = -boxWidth;
           }
         },
+      });
+      this.tweens.add({
+        targets: [up, down],
+        x: this.expanded ? -100 : 20,
+        ease: "Power1",
+        duration: 300,
       });
       this.expanded = !this.expanded;
     };
