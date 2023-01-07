@@ -1,5 +1,6 @@
 import Scenes from "@scenes";
 import { Options } from "@utils/ElementData";
+import { TXT_COLOR } from "config";
 import Phaser from "phaser";
 
 export default class HUD extends Phaser.Scene {
@@ -40,7 +41,14 @@ export default class HUD extends Phaser.Scene {
       this.expanded = !this.expanded;
     };
 
-    const button = this.add.rectangle(30, 0, 60, 50, 0xff2222).setOrigin(0, 0);
+    const button = this.add.rectangle(20, 0, 140, 40, 0xff2222).setOrigin(0);
+    this.add
+      .text(35, 5, `Add item`, {
+        color: TXT_COLOR,
+        fontSize: "24px",
+        fontFamily: "KenneyMiniSquare",
+      })
+      .setOrigin(0);
     button.setInteractive({ useHandCursor: true });
     button.on("pointerdown", toggle);
 

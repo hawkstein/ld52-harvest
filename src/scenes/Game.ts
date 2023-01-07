@@ -43,6 +43,14 @@ export default class Game extends Phaser.Scene {
       });
     });
 
+    this.add
+      .text(400, 10, `Drag here to remove`, {
+        color: TXT_COLOR,
+        fontSize: "24px",
+        fontFamily: "KenneyMiniSquare",
+      })
+      .setOrigin(0);
+
     const HUD = this.scene.get(Scenes.HUD);
     HUD.events.on("add_element", ({ size, colour }: ElementOption) => {
       const newElement = new DisplayElement(
