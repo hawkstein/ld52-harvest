@@ -2,6 +2,7 @@ import Phaser from "phaser";
 
 export const BG_COLOR = "#f5e5b8";
 export const TXT_COLOR = "#000";
+export const FONT_SIZE = "24px";
 
 export default {
   type: Phaser.AUTO,

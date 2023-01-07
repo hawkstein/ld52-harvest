@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import Scenes from "@scenes";
-import { TXT_COLOR } from "config";
+// import { TXT_COLOR } from "config";
 
 export default class Game extends Phaser.Scene {
   private grid: boolean[][];
@@ -19,17 +19,18 @@ export default class Game extends Phaser.Scene {
     //     fontFamily: "KenneyMiniSquare",
     //   })
     //   .setOrigin(0);
-
+    const LEFT = 100;
+    const TOP = 100;
     const TILE_SIZE = 50;
-    const TILE_GAP = 10;
+    const TILE_GAP = 4;
     this.grid.forEach((row, rowIndex) => {
       row.forEach((_, columnIndex) => {
         this.add
           .rectangle(
-            columnIndex * (TILE_SIZE + TILE_GAP),
-            rowIndex * (TILE_SIZE + TILE_GAP),
-            TILE_SIZE,
-            TILE_SIZE,
+            LEFT + TILE_GAP + columnIndex * TILE_SIZE,
+            TOP + TILE_GAP + rowIndex * TILE_SIZE,
+            TILE_SIZE - TILE_GAP * 2,
+            TILE_SIZE - TILE_GAP * 2,
             0x333333,
             0.2
           )
@@ -45,8 +46,8 @@ export default class Game extends Phaser.Scene {
     this.input.on(
       "dragstart",
       (_: Phaser.Input.Pointer, __: Phaser.GameObjects.GameObject) => {
-        const gridX = Math.round(element.x / TILE_AREA);
-        const gridY = Math.round(element.y / TILE_AREA);
+        const gridX = Math.round((element.x - LEFT) / TILE_SIZE);
+        const gridY = Math.round((element.y - TOP) / TILE_SIZE);
         this.grid[gridY][gridX] = true;
         this.originalPos = { x: element.x, y: element.y };
       }
@@ -63,12 +64,11 @@ export default class Game extends Phaser.Scene {
         element.y = dragY;
       }
     );
-    const TILE_AREA = TILE_SIZE + TILE_GAP;
     this.input.on(
       "dragend",
       (_: Phaser.Input.Pointer, __: Phaser.GameObjects.GameObject) => {
-        const gridX = Math.round(element.x / TILE_AREA);
-        const gridY = Math.round(element.y / TILE_AREA);
+        const gridX = Math.round((element.x - LEFT) / TILE_SIZE);
+        const gridY = Math.round((element.y - TOP) / TILE_SIZE);
         if (
           gridY >= 0 &&
           gridY <= 2 &&
@@ -76,8 +76,8 @@ export default class Game extends Phaser.Scene {
           gridX <= 8 &&
           this.grid[gridY][gridX]
         ) {
-          element.x = gridX * TILE_AREA;
-          element.y = gridY * TILE_AREA;
+          element.x = LEFT + gridX * TILE_SIZE;
+          element.y = TOP + gridY * TILE_SIZE;
           this.grid[gridY][gridX] = false;
         } else {
           element.x = this.originalPos?.x ?? 0;
