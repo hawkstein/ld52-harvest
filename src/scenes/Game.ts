@@ -3,7 +3,7 @@ import Scenes from "@scenes";
 import DisplayElement from "sprites/DisplayElement";
 import TileGrid from "@utils/TileGrid";
 import { FADE_LENGTH, TXT_COLOR } from "config";
-import { ElementOption, Options } from "@utils/ElementData";
+import { ElementOption } from "@utils/ElementData";
 
 export default class Game extends Phaser.Scene {
   private grid: TileGrid = new TileGrid();
