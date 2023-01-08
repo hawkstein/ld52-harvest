@@ -103,7 +103,7 @@ const optionsForEnoughOf: OptionId[] = [
 const optionsForLoveHate: OptionId[] = [
   "giant_pumpkin",
   "cartwheel",
-  "cornocopia",
+  "cornucopia",
   "large_mixed_flowers",
   "large_red_flowers",
   "large_yellow_flowers",

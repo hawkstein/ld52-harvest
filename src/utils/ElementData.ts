@@ -6,7 +6,7 @@ export type OptionId =
   | "green_apple"
   | "cartwheel"
   | "wheat_sheaf"
-  | "cornocopia"
+  | "cornucopia"
   | "autumnal_leaves"
   | "large_mixed_flowers"
   | "small_mixed_flowers"
@@ -33,7 +33,7 @@ export const Options: ElementOption[] = [
   { name: "Green Apple", uuid: "green_apple", colour: 0x3ea308, size: 1 },
   { name: "Cartwheel", uuid: "cartwheel", colour: 0x3ea308, size: 3 },
   { name: "Wheat Sheaf", uuid: "wheat_sheaf", colour: 0x3ea308, size: 2 },
-  { name: "Cornocopia", uuid: "cornocopia", colour: 0x3ea308, size: 2 },
+  { name: "Cornucopia", uuid: "cornucopia", colour: 0x3ea308, size: 2 },
   {
     name: "Autumnal Leaves",
     uuid: "autumnal_leaves",
