@@ -63,4 +63,10 @@ export class GameButton extends Phaser.GameObjects.Container {
     this.background.fillRoundedRect(0, 0, this._width, this._height, 8);
     this.background.strokeRoundedRect(0, 0, this._width, this._height, 8);
   }
+
+  setText(text: string) {
+    this.label.setText(text);
+    this.label.x = Math.round(this._width / 2 - this.label.width / 2);
+    this.label.y = Math.round(this._height / 2 - (4 + this.label.height / 2));
+  }
 }

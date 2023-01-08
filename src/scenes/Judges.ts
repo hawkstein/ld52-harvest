@@ -4,6 +4,7 @@ import GameProgess from "@utils/GameProgress";
 import { FADE_LENGTH, TXT_COLOR } from "config";
 import DisplayElement from "sprites/DisplayElement";
 import TileGrid from "@utils/TileGrid";
+import { GameButton } from "sprites/GameButton";
 
 type RecordObj = {
   name: string;
@@ -14,7 +15,7 @@ type RecordObj = {
 };
 
 export default class Judges extends Phaser.Scene {
-  private tryAgainText?: Phaser.GameObjects.Text;
+  private nextButton?: GameButton;
   private judges: [
     Phaser.GameObjects.Rectangle,
     Phaser.GameObjects.Rectangle
@@ -178,32 +179,35 @@ export default class Judges extends Phaser.Scene {
       ease: "Back.easeOut",
     });
 
-    this.addTryAgain();
+    this.addButton();
   }
 
-  addTryAgain() {
-    this.tryAgainText = this.add
-      .text(220, 330, `Next`, {
-        color: TXT_COLOR,
-        fontSize: "24px",
-        fontFamily: "KenneyMiniSquare",
-      })
-      .setOrigin(0)
-      .setInteractive({ useHandCursor: true })
+  addButton() {
+    this.nextButton = this.add
+      .existing(
+        new GameButton({
+          scene: this,
+          x: this.cameras.main.centerX - 100,
+          y: 255,
+          width: 200,
+          height: 50,
+          label: "Next comment",
+        })
+      )
       .on("pointerdown", () => {
         if (this.messages.length) {
           this.feedbackText?.setText(this.messages.pop()!.body);
           if (!this.messages.length) {
-            this.tryAgainText?.setText("View Scores");
+            this.nextButton?.setText("View Scores");
           }
         } else {
           this.clearJudges();
           this.nextYear();
         }
       });
-    this.tryAgainText?.setAlpha(0);
+    this.nextButton?.setAlpha(0);
     this.tweens.add({
-      targets: this.tryAgainText,
+      targets: this.nextButton,
       alpha: 1,
       delay: 800,
       duration: FADE_LENGTH,
@@ -222,6 +226,7 @@ export default class Judges extends Phaser.Scene {
         },
       });
     } else {
+      this.scene.stop(Scenes.GAME);
       this.scene.start(Scenes.GAME_END);
     }
   }
