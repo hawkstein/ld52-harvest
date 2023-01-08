@@ -2,6 +2,7 @@ import Scenes from "@scenes";
 import { Options } from "@utils/ElementData";
 import { TXT_COLOR } from "config";
 import Phaser from "phaser";
+import { GameButton } from "sprites/GameButton";
 
 export default class HUD extends Phaser.Scene {
   private background?: Phaser.GameObjects.Graphics;
@@ -38,14 +39,26 @@ export default class HUD extends Phaser.Scene {
     const container = this.add.container(0, -boxHeight);
     container.setMask(mask);
 
-    const up = this.add
-      .rectangle(-100, 80, 40, 40, 0xff2222)
-      .setOrigin(0)
-      .setInteractive({ useHandCursor: true });
-    const down = this.add
-      .rectangle(-100, 150, 40, 40, 0xff2222)
-      .setOrigin(0)
-      .setInteractive({ useHandCursor: true });
+    const up = this.add.existing(
+      new GameButton({
+        scene: this,
+        label: "UP",
+        x: -100,
+        y: 80,
+        width: 100,
+        height: 50,
+      })
+    );
+    const down = this.add.existing(
+      new GameButton({
+        scene: this,
+        label: "DOWN",
+        x: -100,
+        y: 150,
+        width: 100,
+        height: 50,
+      })
+    );
 
     up.on("pointerdown", () => {
       this.scrollPos = Math.min(0, this.scrollPos + 300);
@@ -118,7 +131,7 @@ export default class HUD extends Phaser.Scene {
         )
         .setOrigin(0);
       const text = this.add
-        .text(250, currentY, option.name, {
+        .text(210 + option.size * 50, currentY, option.name, {
           color: "#fff",
           fontSize: "24px",
           fontFamily: "KenneyMiniSquare",

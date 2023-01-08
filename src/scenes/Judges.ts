@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import Scenes from "@scenes";
 import GameProgess from "@utils/GameProgress";
-import { FADE_LENGTH, TXT_COLOR } from "config";
+import { FADE_LENGTH } from "config";
 import DisplayElement from "sprites/DisplayElement";
 import TileGrid from "@utils/TileGrid";
 import { GameButton } from "sprites/GameButton";
