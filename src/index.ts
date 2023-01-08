@@ -3,7 +3,7 @@ import config from "./config";
 import Preload from "@scenes/Preload";
 import Game from "@scenes/Game";
 import HUD from "@scenes/Hud";
-import GameEnd from "@scenes/End";
+import GameEnd from "@scenes/GameEnd";
 import Start from "@scenes/Start";
 import Options from "@scenes/Options";
 import Credits from "@scenes/Credits";

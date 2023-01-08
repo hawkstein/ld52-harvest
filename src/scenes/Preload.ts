@@ -6,12 +6,6 @@ export default class Preload extends Phaser.Scene {
     super(Scenes.PRELOAD);
   }
 
-  // init() {
-  //   document.fonts.onloadingdone = (ev) => {
-  //     console.log(ev);
-  //   };
-  // }
-
   preload() {
     // Create hidden text with font families that you have preloaded in index.html to ensure Phaser will render them
     this.add.text(0, 0, "Loading...", {

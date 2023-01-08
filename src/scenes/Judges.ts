@@ -2,6 +2,16 @@ import Phaser from "phaser";
 import Scenes from "@scenes";
 import GameProgess from "@utils/GameProgress";
 import { FADE_LENGTH, TXT_COLOR } from "config";
+import DisplayElement from "sprites/DisplayElement";
+import TileGrid from "@utils/TileGrid";
+
+type RecordObj = {
+  name: string;
+  scoreAdjustment: number;
+  message: string;
+  priority: number;
+  key: string;
+};
 
 export default class Judges extends Phaser.Scene {
   private tryAgainText?: Phaser.GameObjects.Text;
@@ -11,14 +21,71 @@ export default class Judges extends Phaser.Scene {
   ][] = [];
   private backdrop?: Phaser.GameObjects.Rectangle;
   private feedbackText?: Phaser.GameObjects.Text;
+  private messages: { name: string; body: string }[] = [];
+  private scores: Record<string, number> = {};
 
   constructor() {
     super(Scenes.JUDGES);
   }
 
-  create() {
+  create({ grid, elements }: { grid: TileGrid; elements: DisplayElement[] }) {
     this.scene.bringToTop();
 
+    const progress = this.game.registry.get("progress") as GameProgess;
+    const judges = progress.getJudges();
+
+    const judgementResults = judges
+      .map((judge) =>
+        judge.prefs.map((judgement) => ({
+          ...judgement(grid, elements),
+          name: judge.name,
+        }))
+      )
+      .flat();
+
+    // Filter out the messages we haven't seen with the highest priority
+    const importantMessages = Object.values(
+      judgementResults.reduce<Record<string, RecordObj>>((highest, msg) => {
+        const messagePriority = progress.hasSeenMessage(msg.key)
+          ? msg.priority - 100
+          : msg.priority;
+        if (!highest[msg.name]) {
+          return {
+            ...highest,
+            [msg.name]: { ...msg, priority: messagePriority },
+          };
+        }
+        if (highest[msg.name].priority < messagePriority) {
+          return {
+            ...highest,
+            [msg.name]: { ...msg, priority: messagePriority },
+          };
+        }
+        return highest;
+      }, {})
+    );
+    this.messages = importantMessages.map(({ name, message }) => ({
+      name,
+      body: message,
+    }));
+    // Use the results to create the panel scores
+    this.scores = judgementResults.reduce<Record<string, number>>(
+      (scoreTotals, result) => {
+        if (!scoreTotals[result.name]) {
+          return {
+            ...scoreTotals,
+            [result.name]: 5 + result.scoreAdjustment,
+          };
+        }
+        return {
+          ...scoreTotals,
+          [result.name]: scoreTotals[result.name] + result.scoreAdjustment,
+        };
+      },
+      {}
+    );
+
+    progress.addMessageKeys(importantMessages.map((msg) => msg.key));
     const boxWidth = this.cameras.main.width;
     const boxHeight = this.cameras.main.height;
     this.add
@@ -32,10 +99,8 @@ export default class Judges extends Phaser.Scene {
     }
 
     this.time.addEvent({
-      delay: 4000,
+      delay: 2000,
       callback: () => {
-        // this.clearJudges();
-        // this.addTryAgain();
         this.addFeedback();
       },
     });
@@ -85,12 +150,7 @@ export default class Judges extends Phaser.Scene {
   }
 
   addFeedback() {
-    const feedbackPool = [
-      "Hmmm. I'd like to see more pumpkins.",
-      "In my opinion, using a cartwheel is just not done anymore",
-      "I love your use of the large red flowers!",
-    ];
-    const feedback = Phaser.Utils.Array.GetRandom(feedbackPool) as string;
+    const feedback = this.messages.pop()!.body;
     const centerY = this.cameras.main.centerY;
     this.backdrop = this.add
       .rectangle(0, centerY, this.cameras.main.width, 100, 0x000000, 0.5)
@@ -118,26 +178,12 @@ export default class Judges extends Phaser.Scene {
       ease: "Back.easeOut",
     });
 
-    // const nextButton = this.add
-    //   .text(this.cameras.main.centerX, centerY + 80, "Next", {
-    //     color: "#000",
-    //     fontSize: "22px",
-    //     fontFamily: "KenneyMiniSquare",
-    //   })
-    //   .setOrigin(0.5)
-    //   .setInteractive({useHandCursor:true})
-    this.time.addEvent({
-      delay: 4000,
-      callback: () => {
-        this.clearJudges();
-        this.addTryAgain();
-      },
-    });
+    this.addTryAgain();
   }
 
   addTryAgain() {
     this.tryAgainText = this.add
-      .text(220, 330, `Try again next year`, {
+      .text(220, 330, `Next`, {
         color: TXT_COLOR,
         fontSize: "24px",
         fontFamily: "KenneyMiniSquare",
@@ -145,7 +191,15 @@ export default class Judges extends Phaser.Scene {
       .setOrigin(0)
       .setInteractive({ useHandCursor: true })
       .on("pointerdown", () => {
-        this.nextYear();
+        if (this.messages.length) {
+          this.feedbackText?.setText(this.messages.pop()!.body);
+          if (!this.messages.length) {
+            this.tryAgainText?.setText("View Scores");
+          }
+        } else {
+          this.clearJudges();
+          this.nextYear();
+        }
       });
     this.tryAgainText?.setAlpha(0);
     this.tweens.add({
@@ -164,11 +218,11 @@ export default class Judges extends Phaser.Scene {
         delay: FADE_LENGTH,
         callback: () => {
           this.scene.stop(Scenes.GAME);
-          this.scene.start(Scenes.YEAR_INTRO);
+          this.scene.start(Scenes.YEAR_SCORES, this.scores);
         },
       });
     } else {
-      console.error("Game over man");
+      this.scene.start(Scenes.GAME_END);
     }
   }
 }

@@ -5,33 +5,18 @@ import TileGrid from "@utils/TileGrid";
 import { FADE_LENGTH, TXT_COLOR } from "config";
 import { ElementOption, Options } from "@utils/ElementData";
 
-type GameState = "building" | "judging";
-
 export default class Game extends Phaser.Scene {
   private grid: TileGrid = new TileGrid();
   private elements: DisplayElement[] = [];
 
   private submitText?: Phaser.GameObjects.Text;
   private removeText?: Phaser.GameObjects.Text;
-  private gameState: GameState = "building";
 
   constructor() {
     super(Scenes.GAME);
   }
 
   init() {
-    console.log("Scene initialising");
-    this.events.once("start", () => {
-      console.log("Scene starting...");
-      this.gameState = "building";
-      this.grid = new TileGrid();
-      this.elements = [];
-    });
-
-    this.events.once("destroy", () => {
-      console.log("Destroying scene...");
-    });
-
     this.events.once("shutdown", () => {
       const HUD = this.scene.get(Scenes.HUD);
       HUD.events.off("add_element");
@@ -39,7 +24,9 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    console.log("Scene creating...");
+    this.grid = new TileGrid();
+    this.elements = [];
+
     this.submitText = this.add
       .text(220, 330, `Submit to judges`, {
         color: TXT_COLOR,
@@ -104,15 +91,6 @@ export default class Game extends Phaser.Scene {
 
   addListenersToObjects() {
     this.submitText?.on("pointerdown", () => {
-      console.table(
-        this.elements.map((sprite) => {
-          return {
-            type: Options.find((option) => option.uuid === sprite.getType())
-              ?.uuid,
-          };
-        })
-      );
-      this.gameState = "judging";
       const HUD = this.scene.get(Scenes.HUD);
       this.tweens.add({
         targets: [HUD.cameras.main, this.submitText, this.removeText],
@@ -128,7 +106,10 @@ export default class Game extends Phaser.Scene {
         600,
         "Back.easeInOut"
       );
-      this.scene.launch(Scenes.JUDGES);
+      this.scene.launch(Scenes.JUDGES, {
+        grid: this.grid,
+        elements: this.elements,
+      });
     });
   }
 

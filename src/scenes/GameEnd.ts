@@ -3,7 +3,7 @@ import Scenes from "@scenes";
 
 export default class GameEnd extends Phaser.Scene {
   constructor() {
-    super(Scenes.END);
+    super(Scenes.GAME_END);
   }
 
   create() {
