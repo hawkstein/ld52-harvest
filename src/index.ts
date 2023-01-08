@@ -9,6 +9,7 @@ import Options from "@scenes/Options";
 import Credits from "@scenes/Credits";
 import YearIntro from "@scenes/YearIntro";
 import Judges from "@scenes/Judges";
+import YearScores from "@scenes/YearScores";
 
 new Phaser.Game(
   Object.assign(config, {
@@ -20,6 +21,7 @@ new Phaser.Game(
       Game,
       HUD,
       Judges,
+      YearScores,
       GameEnd,
       Credits,
     ],
