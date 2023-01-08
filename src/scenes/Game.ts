@@ -4,12 +4,13 @@ import DisplayElement from "sprites/DisplayElement";
 import TileGrid from "@utils/TileGrid";
 import { FADE_LENGTH, TXT_COLOR } from "config";
 import { ElementOption } from "@utils/ElementData";
+import { GameButton } from "sprites/GameButton";
 
 export default class Game extends Phaser.Scene {
   private grid: TileGrid = new TileGrid();
   private elements: DisplayElement[] = [];
 
-  private submitText?: Phaser.GameObjects.Text;
+  private submitText?: GameButton;
   private removeText?: Phaser.GameObjects.Text;
 
   constructor() {
@@ -27,14 +28,24 @@ export default class Game extends Phaser.Scene {
     this.grid = new TileGrid();
     this.elements = [];
 
-    this.submitText = this.add
-      .text(220, 330, `Submit to judges`, {
-        color: TXT_COLOR,
-        fontSize: "24px",
-        fontFamily: "KenneyMiniSquare",
-      })
-      .setOrigin(0)
-      .setInteractive({ useHandCursor: true });
+    // this.submitText = this.add
+    //   .text(220, 330, `Submit to judges`, {
+    //     color: TXT_COLOR,
+    //     fontSize: "24px",
+    //     fontFamily: "KenneyMiniSquare",
+    //   })
+    //   .setOrigin(0)
+    //   .setInteractive({ useHandCursor: true });
+
+    this.submitText = new GameButton({
+      x: 220,
+      y: 330,
+      width: 260,
+      height: 50,
+      scene: this,
+      label: "Submit to judges",
+    });
+    this.add.existing(this.submitText);
 
     const [LEFT, TOP] = this.grid.getWorldPos();
     const TILE_SIZE = this.grid.getTileSize();
