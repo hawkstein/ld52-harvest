@@ -69,7 +69,7 @@ export default class YearScores extends Phaser.Scene {
     const place = this.add
       .text(this.cameras.main.centerX, 280, placementMessage, {
         color: TXT_COLOR,
-        fontSize: "28px",
+        fontSize: FONT_SIZE,
         fontFamily: FONT_FAM,
       })
       .setOrigin(0.5)
