@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Scenes from "@scenes";
 import GameProgess from "@utils/GameProgress";
 import { FADE_LENGTH, FONT_FAM } from "config";
+import { GameButton } from "sprites/GameButton";
 
 export default class YearIntro extends Phaser.Scene {
   constructor() {
@@ -32,16 +33,22 @@ export default class YearIntro extends Phaser.Scene {
         .setOrigin(0.5);
     }
 
-    this.time.addEvent({
-      delay: FADE_LENGTH,
-      callback: () => {
-        const cam = this.cameras.main;
-        cam.fade(FADE_LENGTH, 245, 229, 184);
-        cam.once("camerafadeoutcomplete", () => {
-          this.scene.launch(Scenes.HUD);
-          this.scene.start(Scenes.GAME);
-        });
-      },
+    const startButton = new GameButton({
+      x: this.cameras.main.centerX - 60,
+      y: 230,
+      width: 120,
+      height: 50,
+      scene: this,
+      label: "Start",
     });
+    startButton.once("pointerdown", () => {
+      const cam = this.cameras.main;
+      cam.fade(FADE_LENGTH, 245, 229, 184);
+      cam.once("camerafadeoutcomplete", () => {
+        this.scene.launch(Scenes.HUD);
+        this.scene.start(Scenes.GAME);
+      });
+    });
+    this.add.existing(startButton);
   }
 }

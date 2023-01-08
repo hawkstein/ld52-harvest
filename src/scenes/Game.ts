@@ -28,15 +28,6 @@ export default class Game extends Phaser.Scene {
     this.grid = new TileGrid();
     this.elements = [];
 
-    // this.submitText = this.add
-    //   .text(220, 330, `Submit to judges`, {
-    //     color: TXT_COLOR,
-    //     fontSize: "24px",
-    //     fontFamily: "KenneyMiniSquare",
-    //   })
-    //   .setOrigin(0)
-    //   .setInteractive({ useHandCursor: true });
-
     this.submitText = new GameButton({
       x: 220,
       y: 330,
