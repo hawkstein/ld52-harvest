@@ -36,7 +36,7 @@ export default class HUD extends Phaser.Scene {
 
     const mask = new Phaser.Display.Masks.GeometryMask(this, this.background);
 
-    const container = this.add.container(0, -boxHeight);
+    const container = this.add.container(-boxWidth, -boxHeight);
     container.setMask(mask);
 
     const up = this.add.existing(
