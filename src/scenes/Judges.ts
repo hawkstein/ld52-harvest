@@ -22,6 +22,7 @@ export default class Judges extends Phaser.Scene {
   ][] = [];
   private backdrop?: Phaser.GameObjects.Rectangle;
   private feedbackText?: Phaser.GameObjects.Text;
+  private judgeText?: Phaser.GameObjects.Text;
   private messages: { name: string; body: string }[] = [];
   private scores: Record<string, number> = {};
 
@@ -151,12 +152,20 @@ export default class Judges extends Phaser.Scene {
   }
 
   addFeedback() {
-    const feedback = this.messages.pop()!.body;
+    const { name: judgeName, body: feedback } = this.messages.pop()!;
+
     const centerY = this.cameras.main.centerY;
     this.backdrop = this.add
       .rectangle(0, centerY, this.cameras.main.width, 100, 0x000000, 0.5)
       .setOrigin(0, 0.5)
       .setAlpha(0);
+    this.judgeText = this.add
+      .text(this.cameras.main.centerX, centerY - 20, judgeName, {
+        color: "#fff",
+        fontSize: "22px",
+        fontFamily: "KenneyMiniSquare",
+      })
+      .setOrigin(0.5);
     this.feedbackText = this.add
       .text(this.cameras.main.centerX, centerY + 10, feedback, {
         color: "#fff",
@@ -166,18 +175,18 @@ export default class Judges extends Phaser.Scene {
       .setOrigin(0.5);
 
     this.tweens.add({
-      targets: [this.backdrop, this.feedbackText],
+      targets: [this.backdrop, this.feedbackText, this.judgeText],
       alpha: 1,
       duration: FADE_LENGTH,
       ease: "Power1",
     });
 
-    this.tweens.add({
-      targets: this.feedbackText,
-      y: centerY,
-      duration: FADE_LENGTH,
-      ease: "Back.easeOut",
-    });
+    // this.tweens.add({
+    //   targets: this.feedbackText,
+    //   y: centerY,
+    //   duration: FADE_LENGTH,
+    //   ease: "Back.easeOut",
+    // });
 
     this.addButton();
   }
@@ -196,7 +205,9 @@ export default class Judges extends Phaser.Scene {
       )
       .on("pointerdown", () => {
         if (this.messages.length) {
-          this.feedbackText?.setText(this.messages.pop()!.body);
+          const { name: judgeName, body: feedback } = this.messages.pop()!;
+          this.feedbackText?.setText(feedback);
+          this.judgeText?.setText(judgeName);
           if (!this.messages.length) {
             this.nextButton?.setText("View Scores");
           }

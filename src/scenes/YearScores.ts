@@ -15,7 +15,7 @@ const getPlacementMessage = (score: number) => {
     case 1:
       return "Bottom of the barrel. 36th place is yours.";
     case 2:
-      return "You came 25th. Best keep this quiet or Brenda will talk.";
+      return "You came 25th. Best keep this quiet.";
     case 3:
       return "You came 20th. Hopefully you can improve.";
     case 4:
@@ -31,7 +31,7 @@ const getPlacementMessage = (score: number) => {
     case 9:
       return "So close! 2nd place in the competition. Next year!";
     case 10:
-      return "You won! You came first! You have beaten all others!";
+      return "You won! You came first! You've beaten all others!";
     default:
       return "You came last. For cheating.";
   }
